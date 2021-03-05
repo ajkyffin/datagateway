@@ -32,7 +32,6 @@ describe('Datafile search tab', () => {
       .wait(
         [
           '@investigations',
-          '@investigations',
           '@investigationsCount',
           '@datasets',
           '@datasets',
@@ -42,7 +41,7 @@ describe('Datafile search tab', () => {
           '@datafilesCount',
         ],
         {
-          timeout: 10000,
+          timeout: 100000,
         }
       );
 
@@ -51,7 +50,7 @@ describe('Datafile search tab', () => {
       .contains('1')
       .click()
       .wait(['@datafiles', '@datafiles', '@datafilesCount'], {
-        timeout: 10000,
+        timeout: 100000,
       });
 
     cy.get('[aria-rowcount="1"]').should('exist');
@@ -61,8 +60,8 @@ describe('Datafile search tab', () => {
     // Check that "select all" and individual selection are equivalent
     cy.get(`[aria-rowindex="1"] [aria-colindex="1"]`)
       .click()
-      .wait('@topcat', { timeout: 10000 });
-    cy.get('[aria-label="select all rows"]', { timeout: 10000 }).should(
+      .wait('@topcat', { timeout: 100000 });
+    cy.get('[aria-label="select all rows"]', { timeout: 100000 }).should(
       'be.checked'
     );
     cy.get('[aria-label="select all rows"]')
@@ -74,12 +73,31 @@ describe('Datafile search tab', () => {
     cy.get('[aria-label="Start date input"]').type('2012-02-02');
     cy.get('[aria-label="End date input"]').type('2012-02-03');
 
-    cy.get('[aria-label="Submit search button"]').click();
+    cy.get('[aria-label="Submit search button"]')
+      .click()
+      .wait(
+        [
+          '@investigations',
+          '@investigationsCount',
+          '@datasets',
+          '@datasets',
+          '@datasetsCount',
+          '@datafiles',
+          '@datafiles',
+          '@datafilesCount',
+        ],
+        {
+          timeout: 100000,
+        }
+      );
 
     cy.get('[aria-label="Search table tabs"]')
       .contains('Datafile')
       .contains('4')
-      .click();
+      .click()
+      .wait(['@datafiles', '@datafiles', '@datafilesCount'], {
+        timeout: 100000,
+      });
 
     cy.get('[aria-rowcount="4"]').should('exist');
 
@@ -89,7 +107,20 @@ describe('Datafile search tab', () => {
   it('should be hidden if dataset checkbox is unchecked', () => {
     cy.get('[aria-label="Datafile checkbox"]').click();
 
-    cy.get('[aria-label="Submit search button"]').click();
+    cy.get('[aria-label="Submit search button"]')
+      .click()
+      .wait(
+        [
+          '@investigations',
+          '@investigationsCount',
+          '@datasets',
+          '@datasets',
+          '@datasetsCount',
+        ],
+        {
+          timeout: 100000,
+        }
+      );
 
     cy.get('[aria-rowcount="50"]').should('exist');
 

@@ -32,17 +32,14 @@ describe('Investigation search tab', () => {
       .wait(
         [
           '@investigations',
-          '@investigations',
           '@investigationsCount',
           '@datasets',
-          '@datasets',
           '@datasetsCount',
-          '@datafiles',
           '@datafiles',
           '@datafilesCount',
         ],
         {
-          timeout: 10000,
+          timeout: 100000,
         }
       );
 
@@ -55,10 +52,10 @@ describe('Investigation search tab', () => {
     while (i < 5) {
       cy.get(`[aria-rowindex="${i}"] [aria-colindex="1"]`)
         .click()
-        .wait('@topcat', { timeout: 10000 });
+        .wait('@topcat', { timeout: 100000 });
       i++;
     }
-    cy.get('[aria-label="select all rows"]', { timeout: 10000 }).should(
+    cy.get('[aria-label="select all rows"]', { timeout: 100000 }).should(
       'be.checked'
     );
     cy.get('[aria-label="select all rows"]')
@@ -71,7 +68,21 @@ describe('Investigation search tab', () => {
       .find('#filled-search')
       .type('knowledge media');
 
-    cy.get('[aria-label="Submit search button"]').click();
+    cy.get('[aria-label="Submit search button"]')
+      .click()
+      .wait(
+        [
+          '@investigations',
+          '@investigationsCount',
+          '@datasets',
+          '@datasetsCount',
+          '@datafiles',
+          '@datafilesCount',
+        ],
+        {
+          timeout: 100000,
+        }
+      );
 
     cy.get('[aria-label="Search table tabs"]')
       .contains('Investigation')
@@ -87,7 +98,21 @@ describe('Investigation search tab', () => {
     cy.get('[aria-label="Start date input"]').type('2001-01-01');
     cy.get('[aria-label="End date input"]').type('2001-12-31');
 
-    cy.get('[aria-label="Submit search button"]').click();
+    cy.get('[aria-label="Submit search button"]')
+      .click()
+      .wait(
+        [
+          '@investigations',
+          '@investigationsCount',
+          '@datasets',
+          '@datasetsCount',
+          '@datafiles',
+          '@datafilesCount',
+        ],
+        {
+          timeout: 100000,
+        }
+      );
 
     cy.get('[aria-label="Search table tabs"]')
       .contains('Investigation')
@@ -102,7 +127,11 @@ describe('Investigation search tab', () => {
   it('should be hidden if investigation checkbox is unchecked', () => {
     cy.get('[aria-label="Investigation checkbox"]').click();
 
-    cy.get('[aria-label="Submit search button"]').click();
+    cy.get('[aria-label="Submit search button"]')
+      .click()
+      .wait(['@datasets', '@datasetsCount', '@datafiles', '@datafilesCount'], {
+        timeout: 100000,
+      });
 
     cy.get('[aria-rowcount="50"]').should('exist');
 
